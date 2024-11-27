@@ -1,4 +1,4 @@
-#AI Agents for Medical Coding
+# AI Agents for Medical Coding
 This project leverages LangGraph, LangChain tools, and advanced LLMs (e.g., GPT-4) to automate the generation of Electronic Data Interchange (EDI) claims from medical records. It integrates a MySQL database to manage patient and insurance data while using LangGraph to design a dynamic, agent-based workflow for medical coding, claim generation, and quality assurance.
 
 ## Key Features
@@ -34,7 +34,7 @@ This project leverages LangGraph, LangChain tools, and advanced LLMs (e.g., GPT-
 Compliant EDI Claims: A validated X12 837 Professional EDI file, starting with the ISA segment, ready for submission.
 
 
-# Project Structure
+## Project Structure
 
 ├── app/
 │   ├── components/            # Core functional components
