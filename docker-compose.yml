@@ -1,0 +1,38 @@
+networks:
+  app_network:
+    driver: bridge
+services:
+
+  app:
+    build:
+      context: ./app
+    ports:
+      - "5000:5000"
+    environment:
+      DB_HOST: db
+      DB_USER: mrafi
+      DB_PASSWORD: Tasneem1996
+      DB_NAME: medical
+    depends_on:
+      - db
+    networks:
+      - app_network
+  db:
+    image: mysql:8.0          # MySQL image version
+    container_name: mysql_db  # Name of the container
+    ports:
+      - "3307:3306"           # Map port 3306 of the host to port 3306 of the container
+    environment:
+      MYSQL_ROOT_PASSWORD: Tasneem1996  # Root user password
+      MYSQL_DATABASE: medical           # Default database to create
+      MYSQL_USER: mrafi                 # Additional user
+      MYSQL_PASSWORD: Tasneem1996       # Additional user's password
+    volumes:
+      - "./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro"  # Absolute path to init.sql
+      - db_data:/var/lib/mysql          # Volume to persist database data
+    networks:
+      - app_network
+
+volumes:
+  db_data:
+  

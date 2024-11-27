@@ -1,0 +1,22 @@
+# Ignore Python bytecode files
+*.pyc
+*.pyo
+__pycache__/
+
+# Ignore environment files
+.env
+.vscode/
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+
+# Ignore build outputs
+dist/
+build/
+
+# Ignore node_modules for JavaScript projects
+node_modules/
+
+# Ignore Docker-related files
+*.env

@@ -1,0 +1,8 @@
+langchain
+langgraph==0.2.50
+python-dotenv
+langchain_openai
+langchain_community
+pymysql
+cryptography
+pypdf
