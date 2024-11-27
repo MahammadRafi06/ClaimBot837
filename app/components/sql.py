@@ -3,10 +3,18 @@ from langchain_community.agent_toolkits import SQLDatabaseToolkit
 from components.llms import llm_openai
 import time
 
+from dotenv import load_dotenv
+import os
+load_dotenv()
+user = os.getenv("user")
+pwd = os.getenv("pwd")
+databse = os.getenv("databse")
+
+
 def wait_for_db():
     while True:
         try:
-            db = SQLDatabase.from_uri("mysql+pymysql://mrafi:Tasneem1996@db:3306/medical")
+            db = SQLDatabase.from_uri(f"mysql+pymysql://{user}:{pwd}@db:3306/{databse}")
             if db.get_table_info():
                 print("Database is ready!")
                 return db
