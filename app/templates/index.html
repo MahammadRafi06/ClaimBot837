@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Chart Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background: #f3f4f6;
+            color: #333;
+        }
+        .hero {
+            position: relative;
+            height: 60vh;
+            background: url('{{ url_for("static", filename="hero-bg.jpeg") }}') no-repeat center/cover;
+            color: #fff;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+        .hero h1, .hero p, .hero .btn {
+            position: relative;
+            z-index: 2;
+        }
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0;
+        }
+        .hero p {
+            font-size: 1rem;
+            margin: 15px 0;
+        }
+        .btn {
+            margin-top: 15px;
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.3s, background-color 0.3s;
+            text-decoration: none;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+        }
+        .content h2 {
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+        p.description {
+            color: #555;
+            margin-bottom: 20px;
+        }
+        input[type="file"], button {
+            font-size: 1rem;
+            padding: 8px;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 300px;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            transition: transform 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+        .result {
+            max-height: 300px; /* Restrict height for better visibility */
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            overflow-y: auto; /* Add vertical scrolling if content exceeds */
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+            white-space: pre-wrap; /* Wrap text nicely */
+            word-wrap: break-word; /* Break long words if necessary */
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: #333;
+        }
+        .features {
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .features .feature {
+            display: inline-block;
+            width: 150px;
+            margin: 10px;
+        }
+        .features .feature i {
+            font-size: 2.5rem;
+            color: #007bff;
+        }
+        .features .feature h3 {
+            margin-top: 10px;
+            font-size: 1rem;
+        }
+        footer {
+            background: #007bff;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <div class="hero">
+        <h1>AI-Powered Medical Coding</h1>
+        <p>Streamline Insights for Providers and Payers</p>
+        <a href="#upload" class="btn">Get Started</a>
+    </div>
+
+    <!-- Main Container -->
+    <div id="upload" class="container">
+        <div class="content">
+            <h2>Upload Your Medical Chart</h2>
+            <p class="description">Upload a PDF, and let our AI analyze it for accurate medical coding.</p>
+            <form action="/" method="post" enctype="multipart/form-data">
+                <input type="file" name="file" accept="application/pdf">
+                <button type="submit">Upload</button>
+            </form>
+
+            {% if error %}
+            <p class="error">{{ error }}</p>
+            {% endif %}
+
+            {% if extracted_text %}
+            <h2>Analysis Result</h2>
+            <div class="result">
+                <pre>{{ extracted_text }}</pre>
+            </div>
+            {% if file_path %}
+            <form action="/" method="post">
+                <input type="hidden" name="file_path" value="{{ file_path }}">
+                <button type="submit" name="analyze">Analyze</button>
+            </form>
+            {% endif %}
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="features">
+        <div class="feature">
+            <i class="fas fa-file-medical"></i>
+            <h3>Accurate Coding</h3>
+        </div>
+        <div class="feature">
+            <i class="fas fa-brain"></i>
+            <h3>AI Insights</h3>
+        </div>
+        <div class="feature">
+            <i class="fas fa-clock"></i>
+            <h3>Save Time</h3>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Medical Chart Analyzer. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

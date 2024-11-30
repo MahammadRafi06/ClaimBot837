@@ -24,6 +24,9 @@ def wait_for_db():
 
 db = wait_for_db()
 
+
+
+
 toolkit = SQLDatabaseToolkit(db=db, llm=llm_openai)
 tools = toolkit.get_tools()
 list_tables_tool = next(tool for tool in tools if tool.name == "sql_db_list_tables")

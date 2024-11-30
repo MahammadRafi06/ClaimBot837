@@ -6,3 +6,5 @@ langchain_community
 pymysql
 cryptography
 pypdf
+flask 
+cryptography

@@ -1,0 +1,50 @@
+from flask import Flask, request, render_template, redirect, url_for
+import os
+from werkzeug.utils import secure_filename
+from PyPDF2 import PdfReader
+
+app = Flask(__name__)
+
+# Folder to store uploaded files
+UPLOAD_FOLDER = 'uploads'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['ALLOWED_EXTENSIONS'] = {'pdf'}
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        # Check if a file is uploaded
+        if 'file' not in request.files:
+            return render_template('index.html', error="No file part")
+        file = request.files['file']
+        if file.filename == '':
+            return render_template('index.html', error="No file selected")
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(file_path)
+
+            # Process the PDF
+            extracted_text = process_pdf(file_path)
+            return render_template('index.html', extracted_text=extracted_text)
+        else:
+            return render_template('index.html', error="Invalid file type. Please upload a PDF.")
+    return render_template('index.html')
+
+def process_pdf(file_path):
+    """Extract text from PDF using PyPDF2."""
+    try:
+        reader = PdfReader(file_path)
+        text = ""
+        for page in reader.pages:
+            text += page.extract_text()
+        return text if text.strip() else "No text found in the PDF."
+    except Exception as e:
+        return f"An error occurred while processing the PDF: {str(e)}"
+
+if __name__ == '__main__':
+    app.run(debug=True)

@@ -31,8 +31,8 @@ def create_coders(state:patientgraph):
 
 
 def assistant(state: patientgraph):
-    pt = pathlib.Path(__file__).parent.parent/"data"
-    loader = PyPDFLoader(f"{pt}/John_Doe.pdf",)
+    pt = f"{pathlib.Path(__file__).parent.parent}/data"
+    loader = PyPDFLoader(f"{pt}/{os.listdir(pt)[0]}")
     docs = loader.load()
     text = ''
     for doc in docs:
