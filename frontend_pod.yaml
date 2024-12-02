@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: up
+  labels:
+    app: medicalcoder
+    tier: front-end
+
+spec:
+  containers:
+    - name: medicalcoder
+      image: mrafit20/medicalcoder:1.0.2
