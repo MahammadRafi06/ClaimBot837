@@ -34,7 +34,8 @@ This project leverages LangGraph, LangChain tools, and advanced LLMs (e.g., GPT-
 Compliant EDI Claims: A validated X12 837 Professional EDI file, starting with the ISA segment, ready for submission.
 
 
-## Project Structure
+## Project Structure 
+
 
 ├── app/
 │   ├── components/            # Core functional components
