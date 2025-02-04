@@ -40,11 +40,11 @@ Compliant EDI Claims: A validated X12 837 Professional EDI file, starting with t
 ```plaintext
 ├── app/
 │   ├── components/       # Core functional components
-│   │   ├── classes/      # Pydantic models and typed dictionaries
+│   │   ├── classes/      # Pydantic models and typed dictionaries to extract structured output from LLM 
 │   │   ├── llms/         # LLM configurations and interactions
 │   │   ├── nodes/        # LangGraph nodes for workflow tasks
 │   │   ├── prompts/      # Custom GPT prompts
-│   │   ├── sql/          # SQL utilities and database tools
+│   │   ├── sql/          # SQL utilities and database tools to build tools
 │   ├── data/
 │   │   ├── pdf_charts/   # Sample PDF charts for testing
 │   ├── Dockerfile        # Docker configuration for app container
