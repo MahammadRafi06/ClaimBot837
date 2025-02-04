@@ -38,24 +38,23 @@ Compliant EDI Claims: A validated X12 837 Professional EDI file, starting with t
 
 
 ├── app/
-│   ├── components/            # Core functional components
-│   │   ├── classes/           # Pydantic models and typed dictionaries
-│   │   ├── llms/              # LLM configurations and interactions
-│   │   ├── nodes/             # LangGraph nodes for workflow tasks
-│   │   ├── prompts/           # Custom GPT prompts
-│   │   ├── sql/               # SQL utilities and database tools
+│   ├── components/       # Core functional components
+│   │   ├── classes/      # Pydantic models and typed dictionaries
+│   │   ├── llms/         # LLM configurations and interactions
+│   │   ├── nodes/        # LangGraph nodes for workflow tasks
+│   │   ├── prompts/      # Custom GPT prompts
+│   │   ├── sql/          # SQL utilities and database tools
 │   ├── data/
-│   │   ├── pdf_charts/        # Sample PDF charts for testing
-│   ├── Dockerfile             # Docker configuration for app container
-│   ├── main.py                # Entry point for running the workflow
-│   ├── requirements.txt       # Python dependencies
-│
-├── db/                        
-│   ├── init.sql               # MySQL initialization script
-│
-├── docker-compose.yaml        # Multi-container configuration for app and database
-├── LICENSE                    # Project license
-├── README.md                  # Project documentation
+│   │   ├── pdf_charts/   # Sample PDF charts for testing
+│   ├── Dockerfile        # Docker configuration for app container
+│   ├── main.py          # Entry point for running the workflow
+│   ├── requirements.txt  # Python dependencies
+├── db/
+│   ├── init.sql          # MySQL initialization script
+│   ├── docker-compose.yaml # Multi-container configuration for app and database
+├── LICENSE               # Project license
+├── README.md             # Project documentation
+
 
 # Setup and Usage
 Prerequisites
