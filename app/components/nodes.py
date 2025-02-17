@@ -118,3 +118,5 @@ def route_graph(state: patientgraph):
    else:
      return "extract_pp"
    
+def denial_checker(state: patientgraph):
+   pass
