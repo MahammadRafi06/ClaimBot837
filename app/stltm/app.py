@@ -7,7 +7,7 @@ from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import StateGraph, MessagesState, END, START
 from langgraph.store.memory import InMemoryStore
 
-from  components.nodes import task_mAIstro, update_todos, update_profile, update_instructions
+from  components.nodes import denial_checker, coveredservices_check, coverage_check, medicalpolicy_check
 from  components.conditional_edges import route_message, intermediate 
 
 
@@ -31,15 +31,15 @@ os.environ["LANGCHAIN_API_KEY"] = os.getenv("LANGCHAIN_API_KEY")
 
 builder = StateGraph(MessagesState)
 
-builder.add_node(task_mAIstro)
-builder.add_node(update_todos)
-builder.add_node(update_profile)
-builder.add_node(update_instructions)
-builder.add_edge(START, "task_mAIstro")
-builder.add_conditional_edges("task_mAIstro", route_message, intermediate)
-builder.add_edge("update_todos", "task_mAIstro")
-builder.add_edge("update_profile", "task_mAIstro")
-builder.add_edge("update_instructions", "task_mAIstro")
+builder.add_node(denial_checker)
+builder.add_node(coveredservices_check)
+builder.add_node(coverage_check)
+builder.add_node(medicalpolicy_check)
+builder.add_edge(START, "denial_checker")
+builder.add_conditional_edges("denial_checker", route_message, intermediate)
+builder.add_edge("coveredservices_check", "denial_checker")
+builder.add_edge("coverage_check", "denial_checker")
+builder.add_edge("medicalpolicy_check", "denial_checker")
 across_thread_memory = InMemoryStore()
 within_thread_memory = MemorySaver()
 graph = builder.compile(checkpointer=within_thread_memory, store=across_thread_memory)

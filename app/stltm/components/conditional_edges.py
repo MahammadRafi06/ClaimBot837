@@ -14,21 +14,21 @@ def route_message(state: MessagesState, config: RunnableConfig, store: BaseStore
     elif len(message.tool_calls) == 1:
         tool_call = message.tool_calls[0]
         if tool_call['args']['update_type'] == "user":
-            return ["update_profile"]
+            return ["coverage_check"]
         elif tool_call['args']['update_type'] == "todo":
-            return ["update_todos"]
+            return ["coveredservices_check"]
         elif tool_call['args']['update_type'] == "instructions":
-            return ["update_instructions"]
+            return ["medicalpolicy_check"]
         else:
             raise ValueError
     elif len(message.tool_calls) == 2:
         tool_call = message.tool_calls
         if (tool_call[0]['args']['update_type'] == "user" and tool_call[1]['args']['update_type'] == "todo") or tool_call[0]['args']['update_type'] == "todo" and tool_call[1]['args']['update_type'] == "user":
-            return ["update_profile","update_todos"]
+            return ["coverage_check","coveredservices_check"]
         if (tool_call[0]['args']['update_type'] == "user" and tool_call[1]['args']['update_type'] == "instructions") or tool_call[0]['args']['update_type'] == "instructions" and tool_call[1]['args']['update_type'] == "user":
-            return ["update_profile","update_instructions"]
+            return ["coverage_check","medicalpolicy_check"]
         if (tool_call[0]['args']['update_type'] == "instructions" and tool_call[1]['args']['update_type'] == "todo") or tool_call[0]['args']['update_type'] == "todo" and tool_call[1]['args']['update_type'] == "instructions":
-            return ["update_instructions","update_todos"]
+            return ["medicalpolicy_check","coveredservices_check"]
     else:
-        return ["update_profile","update_todos","update_instructions"]
-intermediate = ["update_profile","update_todos","update_instructions", END]
+        return ["coverage_check","coveredservices_check","medicalpolicy_check"]
+intermediate = ["coverage_check","coveredservices_check","medicalpolicy_check", END]

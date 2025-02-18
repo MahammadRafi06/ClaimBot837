@@ -17,7 +17,7 @@ os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 model = ChatOpenAI(model="gpt-4o", temperature=0)
 
 # Node definitions
-def task_mAIstro(state: MessagesState, config: RunnableConfig, store: BaseStore):
+def denial_checker(state: MessagesState, config: RunnableConfig, store: BaseStore):
 
     """Load memories from the store and use them to personalize the chatbot's response."""
     
@@ -52,7 +52,7 @@ def task_mAIstro(state: MessagesState, config: RunnableConfig, store: BaseStore)
 
     return {"messages": [response]}
 
-def update_profile(state: MessagesState, config: RunnableConfig, store: BaseStore):
+def coverage_check(state: MessagesState, config: RunnableConfig, store: BaseStore):
 
     """Reflect on the chat history and update the memory collection."""
     print("Hello I am profile")    
@@ -96,7 +96,7 @@ def update_profile(state: MessagesState, config: RunnableConfig, store: BaseStor
     print(tool_call_id)
     return {"messages": [{"role": "tool", "content": "updated profile", "tool_call_id":tool_call_id}]}
 
-def update_todos(state: MessagesState, config: RunnableConfig, store: BaseStore):
+def coveredservices_check(state: MessagesState, config: RunnableConfig, store: BaseStore):
 
     """Reflect on the chat history and update the memory collection."""
     
@@ -143,19 +143,19 @@ def update_todos(state: MessagesState, config: RunnableConfig, store: BaseStore)
                   r.model_dump(mode="json"),
             )
         
-    # Respond to the tool call made in task_mAIstro, confirming the update
+    # Respond to the tool call made in denial_checker, confirming the update
     for i in range(len(state["messages"])):
         if "tool_calls" in state["messages"][i].additional_kwargs:
             for tool_call in state['messages'][i].tool_calls:
                 if tool_call["args"]["update_type"] ==  "todo":
                     tool_call_id = tool_call["id"]
 
-    # Extract the changes made by Trustcall and add the the ToolMessage returned to task_mAIstro
+    # Extract the changes made by Trustcall and add the the ToolMessage returned to denial_checker
     todo_update_msg = extract_tool_info(spy.called_tools, tool_name)
     print(tool_call_id)
     return {"messages": [{"role": "tool", "content": todo_update_msg, "tool_call_id":tool_call_id}]}
 
-def update_instructions(state: MessagesState, config: RunnableConfig, store: BaseStore):
+def medicalpolicy_check(state: MessagesState, config: RunnableConfig, store: BaseStore):
 
     """Reflect on the chat history and update the memory collection."""
     
