@@ -4,11 +4,9 @@ metadata:
   name: my-app-service
   namepace: default
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
     - port: 5000
-      targetPort: 5000
-      nodePort: 30008
   selector:
     app: medicalcoder
     tier: front-end
