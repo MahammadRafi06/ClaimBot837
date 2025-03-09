@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: myapp 
-  namepace: default
+  namespace: default
   labels:
     name: myapp-deploy
     tyre: fronend 

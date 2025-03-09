@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myappsql 
+  namespace: default
+  labels:
+    name: myappsql-deploy
+    tyre: backend 
+spec:
+  selector:
+    matchLabels:
+        app: medicalcoder
+        tier: backend      
+  replicas: 1
+  template:
+    metadata: 
+      name: db
+      labels:
+        app: medicalcoder
+        tier: backend
+
+    spec:
+      containers:
+        - name: medicalcoderbackend
+          image: mrafit20/medicalcodersql:1.0.1
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: db-secrets
+                  key: MYSQL_DATABASE
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secrets
+                  key: MYSQL_PASSWORD
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secrets
+                  key: MYSQL_ROOT_PASSWORD
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-secrets
+                  key: MYSQL_USER
+          volumeMounts:
+            - name: init-data
+              mountPath: /docker-entrypoint-initdb.d
+            - name: sqldata
+              mountPath: /var/lib/mysql
+      volumes:
+      - name: init-data
+        configMap:
+          name: db-configmap
+      - name: sqldata
+        persistentVolumeClaim:
+            claimName: db-pv-claim
