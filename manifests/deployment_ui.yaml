@@ -1,28 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: myapp 
+  name: myapp
   namespace: default
   labels:
     name: myapp-deploy
-    tyre: fronend 
+    tyre: fronend
 spec:
   selector:
     matchLabels:
-        app: medicalcoder
-        tier: front-end      
+      app: medicalcoder
+      tier: front-end
   replicas: 1
   template:
-    metadata: 
+    metadata:
       name: up
       labels:
         app: medicalcoder
         tier: front-end
-
     spec:
       containers:
         - name: medicalcoder
-          image: mrafit20/medicalcoder:1.0.1 # {"$imagepolicy": "flux-system:medicalcodeimagepolicy"}
+          image: docker.io/mrafit20/medicalcoder:1.0.2 # {"$imagepolicy": "flux-system:medicalcodeimagepolicy"}
           ports:
             - containerPort: 5000
-
