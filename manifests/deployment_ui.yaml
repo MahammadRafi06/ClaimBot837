@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: medicalcoder
-          image: mrafit20/medicalcoder:1.0.1
+          image: mrafit20/medicalcoder:1.0.1 # {"$imagepolicy": "flux-system:medicalcodeimagepolicy"}
           ports:
             - containerPort: 5000
 
