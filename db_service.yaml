@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: db
-  namepace: default
+  namespace: default
 spec:
   type: ClusterIP
   ports:

@@ -67,5 +67,5 @@ data:
     ('Brian Thomas', '1996-11-17', '888-99-2222', '1717 Cedar Dr', 'San Francisco', 'CA', '94101', 20);
 kind: ConfigMap
 metadata:
-  creationTimestamp: null
   name: db-configmap
+  namespace: default

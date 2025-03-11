@@ -57,4 +57,4 @@ spec:
           name: db-configmap
       - name: sqldata
         persistentVolumeClaim:
-            claimName: db-pv-claim
+            claimName: db-pvc-1gb
