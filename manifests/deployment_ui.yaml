@@ -11,7 +11,7 @@ spec:
     matchLabels:
       app: medicalcoder
       tier: front-end
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       name: up
