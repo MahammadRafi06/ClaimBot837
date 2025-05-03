@@ -1,3 +1,6 @@
+# ClaimBot837: LLM-Driven Automation for Healthcare Claims
+
+
 # ReAct Agents for Coding Workflows(EDIs)
 This project leverages LangGraph, LangChain tools, and advanced LLMs (e.g., GPT-4) to automate the generation of Electronic Data Interchange (EDI) claims from medical records. It integrates a MySQL database to manage patient and insurance data while using LangGraph to design a dynamic, agent-based workflow for medical coding, claim generation, and quality assurance.
 
