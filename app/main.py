@@ -1,60 +1,67 @@
-from components.classes import Coders, patient, insurance_company, patientgraph, Perspectives, pull_pi, ClaimOutput,comment_approve
-from langgraph.graph import START, StateGraph, END
-from langgraph.prebuilt import tools_condition
-from langchain_core.messages import HumanMessage, SystemMessage
-from langgraph.prebuilt import ToolNode
-from langchain_core.tracers.context import tracing_v2_enabled
+"""Main application entry point."""
+
 import os
-import json
+from flask import Flask, request, render_template
+from werkzeug.utils import secure_filename
+from langchain_community.document_loaders import PyPDFLoader
+from workflow.manager import WorkflowManager
 
+app = Flask(__name__)
 
-from components.nodes import create_coders, assistant, extract_pp, claim_generation, route_graph, qa, route_review
-from components.sql import tools
+# Configuration
+UPLOAD_FOLDER = './data'
+ALLOWED_EXTENSIONS = {'pdf'}
 
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['ALLOWED_EXTENSIONS'] = ALLOWED_EXTENSIONS
 
+def allowed_file(filename: str) -> bool:
+    """Check if file extension is allowed."""
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    """Handle main page requests."""
+    if request.method == 'POST':
+        if 'file' in request.files:
+            return handle_file_upload()
+        elif 'analyze' in request.form:
+            return handle_file_analysis()
+    return render_template('index.html')
 
+def handle_file_upload():
+    """Handle PDF file upload."""
+    file = request.files['file']
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(file_path)
+        return render_template('index.html', file_path=filename)
+    return render_template('index.html', error="Invalid file type")
 
+def handle_file_analysis():
+    """Process the uploaded file through the workflow."""
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], request.form['file_path'])
+    if not os.path.exists(file_path):
+        return render_template('index.html', error="File not found")
+    
+    try:
+        # Load and process the PDF
+        loader = PyPDFLoader(file_path)
+        docs = loader.load()
+        text = ' '.join(doc.page_content for doc in docs)
+        
+        # Process through workflow
+        workflow = WorkflowManager()
+        result = workflow.process_claim(text)
+        
+        # Cleanup
+        os.remove(file_path)
+        
+        return render_template('index.html', extracted_text=result['ediclaim'])
+    except Exception as e:
+        return render_template('index.html', error=f"Processing error: {str(e)}")
 
-
-
-builder = StateGraph(patientgraph)
-
-# Define nodes: these do the work
-builder.add_node("assistant", assistant)
-builder.add_node("tools", ToolNode(tools))
-builder.add_node("claim_generation", claim_generation)
-builder.add_node("extract_pp",extract_pp)
-builder.add_node("create_coders", create_coders)
-builder.add_node("qa", qa)
-
-
-# Define edges: these determine how the control flow moves
-builder.add_edge(START, "create_coders")
-builder.add_edge("create_coders", "assistant")
-# builder.add_edge("assistant","claim_generation")
-builder.add_conditional_edges(
-    "assistant",
-    # If the latest message (result) from assistant1 is a tool call -> tools_condition routes to tools
-    # If the latest message (result) from assistant1 is a not a tool call -> tools_condition routes to END
-    route_graph, ["tools","extract_pp" ]
-)
-
-builder.add_edge("tools", "assistant")
-builder.add_edge("extract_pp", "claim_generation")
-
-builder.add_edge("claim_generation", "qa")
-builder.add_conditional_edges(
-    "qa",
-    # If the latest message (result) from assistant1 is a tool call -> tools_condition routes to tools
-    # If the latest message (result) from assistant1 is a not a tool call -> tools_condition routes to END
-    route_review, [END,"claim_generation" ]
-)
-react_graph = builder.compile()
-
-
-with tracing_v2_enabled(project_name=os.getenv("LANGCHAIN_PROJECT")):
-    messages = [HumanMessage(content="Start process")]
-    messages = react_graph.invoke({"messages": messages, "medicalreport":'', "max_coders":3})
-
-print(messages)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)

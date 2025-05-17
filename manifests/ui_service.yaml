@@ -1,13 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: my-app-service
-  namespace: default
+  name: claimbot-ui
+  namespace: claimbot
 spec:
-  type: LoadBalancer
-  ports:
-    - port: 5000
   selector:
-    app: medicalcoder
-    tier: front-end
+    app: claimbot
+    component: ui
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+  type: LoadBalancer
 ---

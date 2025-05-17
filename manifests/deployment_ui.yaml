@@ -1,26 +1,69 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: myapp
-  namespace: default
+  name: claimbot-ui
+  namespace: claimbot
   labels:
-    name: myapp-deploy
-    tyre: fronend
+    app: claimbot
+    component: ui
 spec:
   selector:
     matchLabels:
-      app: medicalcoder
-      tier: front-end
+      app: claimbot
+      component: ui
   replicas: 2
   template:
     metadata:
-      name: up
       labels:
-        app: medicalcoder
-        tier: front-end
+        app: claimbot
+        component: ui
     spec:
       containers:
-        - name: medicalcoder
-          image: docker.io/mrafit20/medicalcoder:1.0.2 # {"$imagepolicy": "flux-system:medicalcodeimagepolicy"}
+        - name: claimbot-ui
+          image: claimbot837:latest
           ports:
             - containerPort: 5000
+          env:
+            - name: DB_HOST
+              value: claimbot-db
+            - name: DB_PORT
+              value: "3306"
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: db-secrets
+                  key: MYSQL_DATABASE
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-secrets
+                  key: MYSQL_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secrets
+                  key: MYSQL_PASSWORD
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: OPENAI_API_KEY
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 5
