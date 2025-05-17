@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: db
-  namespace: default
+  name: neuroclaim-db
+  namespace: neuroclaim
 spec:
   type: ClusterIP
   ports:
     - port: 3306
       targetPort: 3306
   selector:
-    app: medicalcoder
+    app: neuroclaim
     tier: backend

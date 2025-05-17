@@ -159,10 +159,10 @@ The system uses a graph-based workflow with specialized AI agents:
 ### 1. Build and Push Docker Image
 ```bash
 # Build the image
-docker build -t your-registry/claimbot837:latest .
+docker build -t your-registry/neuroclaim:latest .
 
 # Push to registry
-docker push your-registry/claimbot837:latest
+docker push your-registry/neuroclaim:latest
 ```
 
 ### 2. Update Secrets
@@ -197,13 +197,13 @@ kubectl apply -f manifests/ui_service.yaml
 ### 4. Verify Deployment
 ```bash
 # Check pods
-kubectl -n claimbot get pods
+kubectl -n neuroclaim get pods
 
 # Check services
-kubectl -n claimbot get services
+kubectl -n neuroclaim get services
 
 # Get application URL
-kubectl -n claimbot get service claimbot-ui
+kubectl -n neuroclaim get service neuroclaim-ui
 ```
 
 ## Monitoring

@@ -1,28 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: myappsql 
-  namespace: default
+  name: neuroclaim-db
+  namespace: neuroclaim
   labels:
-    name: myappsql-deploy
-    tyre: backend 
+    name: neuroclaim-db
+    tier: backend 
 spec:
   selector:
     matchLabels:
-        app: medicalcoder
+        app: neuroclaim
         tier: backend      
-  replicas: 2
+  replicas: 1
   template:
     metadata: 
       name: db
       labels:
-        app: medicalcoder
+        app: neuroclaim
         tier: backend
 
     spec:
       containers:
-        - name: medicalcoderbackend
-          image: mrafit20/medicalcodersql:1.0.1
+        - name: neuroclaim-db
+          image: mysql:8.0
           ports:
             - containerPort: 3306
           env:

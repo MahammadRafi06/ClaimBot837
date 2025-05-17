@@ -45,10 +45,10 @@ run:
 
 # Docker commands
 docker-build:
-	docker build -t claimbot837 .
+	docker build -t neuroclaim .
 
 docker-run:
-	docker run -p 5000:5000 claimbot837
+	docker run -p 5000:5000 neuroclaim
 
 # Database
 db-init:
