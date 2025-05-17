@@ -1,6 +1,6 @@
-# ClaimBot837: AI-Powered Healthcare Claims Processing
+# NeuroClaim: Intelligent Healthcare Claims Processing
 
-ClaimBot837 is an advanced healthcare claims automation system that uses AI agents to process and generate compliant EDI claims from medical records.
+NeuroClaim is an advanced healthcare claims automation system that uses AI agents to process and generate compliant EDI claims from medical records.
 
 ## Features
 

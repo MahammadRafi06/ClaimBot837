@@ -1,31 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: claimbot-ui
-  namespace: claimbot
+  name: neuroclaim-ui
+  namespace: neuroclaim
   labels:
-    app: claimbot
+    app: neuroclaim
     component: ui
 spec:
   selector:
     matchLabels:
-      app: claimbot
+      app: neuroclaim
       component: ui
   replicas: 2
   template:
     metadata:
       labels:
-        app: claimbot
+        app: neuroclaim
         component: ui
     spec:
       containers:
-        - name: claimbot-ui
-          image: claimbot837:latest
+        - name: neuroclaim-ui
+          image: neuroclaim:latest
           ports:
             - containerPort: 5000
           env:
             - name: DB_HOST
-              value: claimbot-db
+              value: neuroclaim-db
             - name: DB_PORT
               value: "3306"
             - name: DB_NAME
