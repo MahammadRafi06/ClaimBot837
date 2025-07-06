@@ -1,15 +1,19 @@
-# NeuroClaim: Intelligent Healthcare Claims Processing
+# NeuroClaim: Intelligent Healthcare Claims Processing System
 
-NeuroClaim is an advanced healthcare claims automation system that uses AI agents to process and generate compliant EDI claims from medical records.
+An advanced AI-powered healthcare claims automation platform that uses multi-agent architecture to process medical records and generate compliant EDI X12 837 claims.
 
-## Features
+## Overview
 
-- 🤖 Multi-Agent Architecture for intelligent claims processing
-- 🏥 Automated EDI X12 837 Professional claim generation
-- ✅ Built-in quality assurance and compliance checking
-- 🔄 Iterative improvement through AI-powered feedback
-- 📊 Prometheus metrics for monitoring
-- 🚀 Kubernetes-ready deployment
+NeuroClaim transforms healthcare claims processing through intelligent automation. The system employs specialized AI agents working in concert to extract medical information, generate accurate claims, and ensure compliance with industry standards. Built with LangGraph and OpenAI GPT-4, it offers a scalable, Kubernetes-ready solution for healthcare organizations.
+
+## Key Features
+
+- **Multi-Agent Architecture**: Specialized AI agents for extraction, coding, and quality assurance
+- **EDI X12 837 Compliance**: Generates industry-standard professional claims
+- **Kubernetes Ready**: Production-ready deployment with comprehensive manifests
+- **Quality Assurance**: Built-in validation and compliance checking
+- **Prometheus Metrics**: Comprehensive monitoring and performance tracking
+- **MySQL Integration**: Robust database management for patient and insurance data
 
 ## System Architecture
 
@@ -37,7 +41,6 @@ graph TB
         LG[LangGraph]
     end
 
-    %% Data Flow
     PDF --> EA
     DB --> EA
     EA --> CA
@@ -45,14 +48,12 @@ graph TB
     QA -->|Approved| OUT[EDI Claim]
     QA -->|Needs Review| CA
 
-    %% Service Dependencies
     EA --> GPT
     CA --> GPT
     QA --> GPT
     GPT --> LC
     LC --> LG
 
-    %% Infrastructure Integration
     K8S --- EA
     K8S --- CA
     K8S --- QA
@@ -71,65 +72,76 @@ graph TB
     style OUT fill:#98FB98,stroke:#006400
 ```
 
-### Architecture Overview
+## Agent Workflow
 
-1. **Input Processing**
-   - Medical PDF records are uploaded through the web interface
-   - Patient and insurance data is stored in MySQL database
+1. **Extractor Agent**: Processes medical PDF records and extracts structured information
+2. **Coder Agent**: Generates EDI X12 837 claims using extracted data
+3. **QA Agent**: Validates claims for compliance and accuracy with feedback loops
 
-2. **Agent Workflow**
-   - **Extractor Agent**: Processes inputs and extracts structured information
-   - **Coder Agent**: Generates EDI claims using extracted data
-   - **QA Agent**: Validates claims for compliance and accuracy
+## Project Structure
 
-3. **LLM Integration**
-   - OpenAI GPT-4 powers the intelligent processing
-   - LangChain provides the agent framework
-   - LangGraph manages the workflow orchestration
+```
+NeuroClaim/
+├── app/
+│   ├── agents/               # AI agents implementation
+│   │   ├── base_agent.py     # Base agent class
+│   │   ├── extractor_agent.py # Data extraction agent
+│   │   ├── coder_agent.py    # Claim generation agent
+│   │   └── qa_agent.py       # Quality assurance agent
+│   ├── components/           # Core components
+│   │   ├── classes.py        # Pydantic models
+│   │   ├── llms.py           # LLM configurations
+│   │   ├── nodes.py          # LangGraph nodes
+│   │   ├── prompts.py        # GPT prompts
+│   │   └── sql.py            # Database utilities
+│   ├── data/                 # Sample data
+│   ├── templates/            # Web templates
+│   ├── static/               # Static assets
+│   ├── workflow/             # Workflow management
+│   └── main.py               # Application entry point
+├── manifests/                # Kubernetes configurations
+├── db/                       # Database setup
+├── Dockerfile                # Container configuration
+├── Makefile                  # Development commands
+└── requirements.txt          # Dependencies
+```
 
-4. **Infrastructure**
-   - Kubernetes manages deployment and scaling
-   - Prometheus collects performance metrics
-   - Load balancer handles incoming traffic
+## Installation
 
-5. **Data Flow**
-   - PDF → Extractor → Coder → QA → EDI Claim
-   - Feedback loop from QA to Coder for improvements
-   - Metrics collection at each step
-
-## Architecture
-
-The system uses a graph-based workflow with specialized AI agents:
-
-- **Extractor Agent**: Processes medical records and extracts patient/insurance information
-- **Coder Agent**: Generates EDI claims based on extracted information
-- **QA Agent**: Reviews and validates generated claims
-
-## Prerequisites
+### Prerequisites
 
 - Python 3.9+
 - MySQL Database
 - OpenAI API Key
-- Kubernetes cluster
+- Kubernetes cluster (for production)
 - Docker
 
-## Local Development
+### Local Development
 
-1. **Setup Virtual Environment**
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/MahammadRafi06/NeuroClaim.git
+   cd NeuroClaim
+   ```
+
+2. **Create virtual environment:**
    ```bash
    python -m venv venv
-   source venv/bin/activate  # Linux/Mac
-   # or
-   .\venv\Scripts\activate  # Windows
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
-2. **Install Dependencies**
+3. **Install dependencies:**
    ```bash
-   make install
+   pip install -r requirements.txt
    ```
 
-3. **Configure Environment**
-   Create a `.env` file with:
+4. **Configure environment:**
+   ```bash
+   cp .env.example .env
+   # Edit .env with your configuration
+   ```
+
+   Required environment variables:
    ```env
    OPENAI_API_KEY=your_api_key
    DB_HOST=localhost
@@ -139,14 +151,9 @@ The system uses a graph-based workflow with specialized AI agents:
    DB_PASSWORD=your_password
    ```
 
-4. **Run Tests**
+5. **Run the application:**
    ```bash
-   make test
-   ```
-
-5. **Start Application**
-   ```bash
-   make run
+   python app/main.py
    ```
 
 ## Kubernetes Deployment
@@ -156,116 +163,143 @@ The system uses a graph-based workflow with specialized AI agents:
 - kubectl configured
 - Docker registry access
 
-### 1. Build and Push Docker Image
-```bash
-# Build the image
-docker build -t your-registry/neuroclaim:latest .
+### Deployment Steps
 
-# Push to registry
-docker push your-registry/neuroclaim:latest
+1. **Build and push Docker image:**
+   ```bash
+   docker build -t your-registry/neuroclaim:latest .
+   docker push your-registry/neuroclaim:latest
+   ```
+
+2. **Create secrets:**
+   ```bash
+   # Base64 encode your secrets
+   echo -n 'your-openai-api-key' | base64
+   echo -n 'your-db-password' | base64
+   ```
+
+3. **Deploy to Kubernetes:**
+   ```bash
+   # Create namespace
+   kubectl apply -f manifests/namespace.yaml
+   
+   # Deploy database
+   kubectl apply -f manifests/storage-class.yaml
+   kubectl apply -f manifests/db_pv.yaml
+   kubectl apply -f manifests/db_pvc.yaml
+   kubectl apply -f manifests/db_configmap.yaml
+   kubectl apply -f manifests/db_secrets.yaml
+   kubectl apply -f manifests/deploy_mysql_vol.yaml
+   kubectl apply -f manifests/db_service.yaml
+   
+   # Deploy application
+   kubectl apply -f manifests/app-secrets.yaml
+   kubectl apply -f manifests/deployment_ui.yaml
+   kubectl apply -f manifests/ui_service.yaml
+   ```
+
+4. **Verify deployment:**
+   ```bash
+   kubectl -n neuroclaim get pods
+   kubectl -n neuroclaim get services
+   ```
+
+## Usage
+
+### Web Interface
+
+Access the application at `http://localhost:5000` and:
+
+1. Upload medical PDF records
+2. Review extracted information
+3. Generate EDI claims
+4. Download compliant X12 837 files
+
+### API Usage
+
+The system provides RESTful APIs for programmatic access:
+
+```bash
+curl -X POST "http://localhost:5000/process" \
+     -H "Content-Type: application/json" \
+     -d '{"file_path": "path/to/medical/record.pdf"}'
 ```
 
-### 2. Update Secrets
-```bash
-# Create base64 encoded secrets
-echo -n 'your-openai-api-key' | base64
-echo -n 'your-db-password' | base64
+## Monitoring and Metrics
 
-# Update the secrets in manifests/app-secrets.yaml and manifests/db-secrets.yaml
-```
+The application exposes Prometheus metrics at `/metrics`:
 
-### 3. Deploy Application
-```bash
-# Create namespace
-kubectl apply -f manifests/namespace.yaml
-
-# Deploy database
-kubectl apply -f manifests/storage-class.yaml
-kubectl apply -f manifests/db_pv.yaml
-kubectl apply -f manifests/db_pvc.yaml
-kubectl apply -f manifests/db_configmap.yaml
-kubectl apply -f manifests/db_secrets.yaml
-kubectl apply -f manifests/deploy_mysql_vol.yaml
-kubectl apply -f manifests/db_service.yaml
-
-# Deploy application
-kubectl apply -f manifests/app-secrets.yaml
-kubectl apply -f manifests/deployment_ui.yaml
-kubectl apply -f manifests/ui_service.yaml
-```
-
-### 4. Verify Deployment
-```bash
-# Check pods
-kubectl -n neuroclaim get pods
-
-# Check services
-kubectl -n neuroclaim get services
-
-# Get application URL
-kubectl -n neuroclaim get service neuroclaim-ui
-```
-
-## Monitoring
-
-The application exposes Prometheus metrics at `/metrics`. Key metrics include:
 - Processing time per agent
 - Success/error rates
 - LLM token usage
 - State size tracking
 
-## Development Commands
+## Development
+
+### Available Make Commands
 
 ```bash
-# Format code
-make format
-
-# Run linters
-make lint
-
-# Clean project
-make clean
-
-# Generate documentation
-make docs
-
-# Build Docker image
-make docker-build
+make install     # Install dependencies
+make test        # Run tests
+make lint        # Run linters
+make format      # Format code
+make clean       # Clean artifacts
+make docs        # Generate documentation
+make run         # Run application
+make docker-build # Build Docker image
 ```
 
-## Project Structure
+### Testing
+
+```bash
+# Run all tests
+make test
+
+# Run specific test
+pytest tests/test_agents.py -v
 ```
-.
-├── app/
-│   ├── agents/          # AI agents implementation
-│   ├── components/      # Core components
-│   ├── utils/          # Utilities and helpers
-│   ├── workflow/       # Workflow management
-│   └── main.py         # Application entry point
-├── manifests/          # Kubernetes configurations
-├── tests/             # Test suite
-├── Dockerfile         # Container definition
-├── Makefile          # Development commands
-└── requirements.txt   # Python dependencies
-```
+
+## Configuration
+
+The system uses environment variables and configuration files:
+
+- `.env`: Environment-specific settings
+- `config.py`: Application configuration
+- `manifests/`: Kubernetes configurations
+
+## Dependencies
+
+- LangChain & LangGraph: Agent framework
+- OpenAI GPT-4: Language model
+- MySQL: Database
+- Flask: Web framework
+- Kubernetes: Container orchestration
+- Prometheus: Metrics collection
 
 ## Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
+## Author
+
+**MahammadRafi**
+- GitHub: [@MahammadRafi06](https://github.com/MahammadRafi06)
+- Email: mrafi@uw.edu
+
 ## Acknowledgments
 
-- LangChain for the agent framework
-- OpenAI for language models
-- Kubernetes for container orchestration
+- LangChain team for the agent framework
+- OpenAI for GPT-4 language model
+- Kubernetes community for orchestration platform
+- Healthcare industry standards organizations
 
 
 # ReAct Agents for Coding Workflows(EDIs)
@@ -315,16 +349,18 @@ Compliant EDI Claims: A validated X12 837 Professional EDI file, starting with t
 │   │   ├── nodes/        # LangGraph nodes for workflow tasks
 │   │   ├── prompts/      # Custom GPT prompts
 │   │   ├── sql/          # SQL utilities and database tools to build tools
-│   ├── data/
-│   │   ├── pdf_charts/   # Sample PDF charts for testing
-│   ├── Dockerfile        # Docker configuration for app container
-│   ├── main.py          # Entry point for running the workflow
-│   ├── requirements.txt  # Python dependencies
-├── db/
-│   ├── init.sql          # MySQL initialization script
-│   ├── docker-compose.yaml # Multi-container configuration for app and database
-├── LICENSE               # Project license
-├── README.md             # Project documentation
+│   │   ├── data/
+│   │   │   ├── pdf_charts/   # Sample PDF charts for testing
+│   │   ├── Dockerfile        # Docker configuration for app container
+│   │   ├── main.py          # Entry point for running the workflow
+│   │   ├── requirements.txt  # Python dependencies
+│   │   └── workflow/       # Workflow management
+│   ├── db/
+│   │   ├── init.sql          # MySQL initialization script
+│   │   ├── docker-compose.yaml # Multi-container configuration for app and database
+│   │   └── workflow/       # Workflow management
+│   ├── LICENSE               # Project license
+│   └── README.md             # Project documentation
 
 
 # Setup and Usage
