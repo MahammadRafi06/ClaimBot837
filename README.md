@@ -1,10 +1,10 @@
-# NeuroCoder: Intelligent Healthcare Claims Processing System
+# AgenticCoders: Intelligent Healthcare Claims Processing System
 
 An advanced AI-powered healthcare claims automation platform that uses multi-agent architecture to process medical records and generate compliant EDI X12 837 claims.
 
 ## Overview
 
-NeuroClaim transforms healthcare claims processing through intelligent automation. The system employs specialized AI agents working in concert to extract medical information, generate accurate claims, and ensure compliance with industry standards. Built with LangGraph and OpenAI GPT-4, it offers a scalable, Kubernetes-ready solution for healthcare organizations.
+AgenticCoders transforms healthcare claims processing through intelligent automation. The system employs specialized AI agents working in concert to extract medical information, generate accurate claims, and ensure compliance with industry standards. Built with LangGraph and OpenAI GPT-4, it offers a scalable, Kubernetes-ready solution for healthcare organizations.
 
 ## Key Features
 
