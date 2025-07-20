@@ -1,4 +1,4 @@
-# NeuroClaim: Intelligent Healthcare Claims Processing System
+# NeuroCoder: Intelligent Healthcare Claims Processing System
 
 An advanced AI-powered healthcare claims automation platform that uses multi-agent architecture to process medical records and generate compliant EDI X12 837 claims.
 
